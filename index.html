@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zombie-Perkolation</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Zombie-Perkolation</h1>
+      <p>Ab welcher Bevölkerungsdichte überrennt ein einziger Zombie die ganze Karte?</p>
+      <nav id="tabs">
+        <button data-tab="outbreak" class="active">Ausbruch</button>
+        <button data-tab="clusters">Cluster</button>
+        <button data-tab="experiment">Experiment</button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="stage">
+        <canvas id="grid"></canvas>
+        <canvas id="chart" hidden></canvas>
+      </section>
+
+      <aside>
+        <div id="common">
+          <label>
+            <span>Bevölkerungsdichte <output id="pOut"></output></span>
+            <div class="slider-wrap">
+              <input id="p" type="range" min="0" max="1" step="0.001" value="0.55" />
+              <i id="pcMark" title="kritische Dichte"></i>
+            </div>
+          </label>
+          <label>
+            <span>Nachbarschaft</span>
+            <select id="lattice">
+              <option value="4">4 Nachbarn (Quadratgitter)</option>
+              <option value="6">6 Nachbarn (Dreiecksgitter)</option>
+              <option value="8">8 Nachbarn (mit Diagonalen)</option>
+            </select>
+          </label>
+          <label>
+            <span>Kartengröße</span>
+            <select id="size">
+              <option>40</option>
+              <option>80</option>
+              <option selected>160</option>
+              <option>320</option>
+            </select>
+          </label>
+          <button id="regen">Neue Karte</button>
+        </div>
+
+        <div class="panel" data-panel="outbreak">
+          <label>
+            <span>Biss-Wahrscheinlichkeit <output id="biteOut"></output></span>
+            <input id="bite" type="range" min="0.05" max="1" step="0.01" value="1" />
+          </label>
+          <label>
+            <span>Geschwindigkeit <output id="speedOut"></output></span>
+            <input id="speed" type="range" min="1" max="60" step="1" value="20" />
+          </label>
+          <div class="row">
+            <button id="bite-random" class="primary">Ausbruch!</button>
+            <button id="heal">Heilen</button>
+          </div>
+          <p class="hint">Klick auf einen Menschen startet dort einen Ausbruch.</p>
+        </div>
+
+        <div class="panel" data-panel="clusters" hidden>
+          <p class="hint">
+            Jeder zusammenhängende Cluster hat eine Farbe; der größte ist weiß, sobald er die Karte
+            durchspannt gelb. Schiebe die Dichte langsam über die Schwelle.
+          </p>
+        </div>
+
+        <div class="panel" data-panel="experiment" hidden>
+          <label>
+            <span>Durchläufe je Kartengröße</span>
+            <select id="trials">
+              <option>50</option>
+              <option selected>200</option>
+              <option>1000</option>
+            </select>
+          </label>
+          <label>
+            <span>Messgröße</span>
+            <select id="metric">
+              <option value="spanProb">P(Cluster durchspannt Karte)</option>
+              <option value="largestFrac">Anteil des größten Clusters</option>
+            </select>
+          </label>
+          <div class="row">
+            <button id="run" class="primary">Experiment starten</button>
+          </div>
+          <p class="hint">
+            Verglichen werden Karten mit 20², 40², 80² und 160² Zellen. Je größer die Karte, desto
+            schärfer der Sprung an der kritischen Dichte.
+          </p>
+        </div>
+
+        <dl id="stats"></dl>
+      </aside>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
